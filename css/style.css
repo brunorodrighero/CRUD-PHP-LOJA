@@ -1,0 +1,52 @@
+/* Custom Stylesheet */
+/**
+ * Use this file to override Materialize files so you can update
+ * the core Materialize files in the future
+ *
+ * Made By MaterializeCSS.com
+ */
+
+.icon-block {
+  padding: 0 15px;
+}
+.icon-block .material-icons {
+	font-size: inherit;
+}
+
+#logo-container img {
+  height: 68px;
+}
+
+#download-button {  
+  font-family: Montserrat;
+  font-style: normal;  
+  color: #FFFFFF;   
+}
+
+body {
+  display: flex !important;
+  min-height: 100vh !important;
+  flex-direction: column !important;
+  background: #3D3D33 !important;
+}
+
+main {
+  flex: 1 0 auto !important;
+}
+
+.texto_ecocar {
+  font-family: Montserrat;
+font-style: normal;
+font-weight: normal;
+text-align: center;
+display: flex;
+align-items: center;
+}
+
+#img_footer {
+  height: 60px;
+}
+
+select {
+  display: block;
+}
