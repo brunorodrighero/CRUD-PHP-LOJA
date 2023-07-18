@@ -1,27 +1,34 @@
 <?php
-    //sessão
     session_start();
-    //Conexão
+
     require_once "db_connect.php";
 
-    if(isset($_POST['btn-adicionar'])):
-        $marca=mysqli_escape_string($connect, $_POST['marca']);
-        $modelo=mysqli_escape_string($connect, $_POST['modelo']);
-        $descricao=mysqli_escape_string($connect, $_POST['descricao']);
-        $mod_fab=mysqli_escape_string($connect, $_POST['mod_fab']);
-        $cor=mysqli_escape_string($connect, $_POST['cor']);
-        $placa=mysqli_escape_string($connect, $_POST['placa']);
-        $valor=mysqli_escape_string($connect, $_POST['valor']);
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $marca = $_POST['marca'] ?? '';
+        $modelo = $_POST['modelo'] ?? '';
+        $descricao = $_POST['descricao'] ?? '';
+        $mod_fab = $_POST['mod_fab'] ?? '';
+        $cor = $_POST['cor'] ?? '';
+        $placa = $_POST['placa'] ?? '';
+        $valor = $_POST['valor'] ?? '';
 
-        $sql="INSERT INTO estoque (marca, modelo, descricao, mod_fab, cor, placa, valor) VALUES ('$marca','$modelo','$descricao','$mod_fab','$cor','$placa','$valor')";
+        $sql = "INSERT INTO estoque (marca, modelo, descricao, mod_fab, cor, placa, valor) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        if(mysqli_query($connect, $sql)):
-            header("Location: ../index.php?sucesso");
-        else:
-            header("Location: '../index.php?erro");
-        
-    endif;
-    
-endif;
+        if ($stmt = mysqli_prepare($connect, $sql)) {
+            mysqli_stmt_bind_param($stmt, "sssssss", $marca, $modelo, $descricao, $mod_fab, $cor, $placa, $valor);
 
+            if (mysqli_stmt_execute($stmt)) {
+                header("Location: ../index.php?sucesso", true, 303);
+                exit;
+            } else {
+                header("Location: ../index.php?erro", true, 303);
+                exit;
+            }
+
+            mysqli_stmt_close($stmt);
+        } else {
+            header("Location: ../index.php?erro", true, 303);
+            exit;
+        }
+    }
 ?>
