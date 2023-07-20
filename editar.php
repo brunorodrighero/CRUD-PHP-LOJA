@@ -1,17 +1,24 @@
 <?php
 
 //conexao
-include_once "php_action/db_connect.php";
+require 'php_action/db_connect.php';
 
 //header
-include_once "includes/header.php";
+require 'includes/header.php';
 
-if(isset($_GET['id'])):
-    $id=mysqli_escape_string($connect, $_GET['id']);
-    $sql="SELECT * FROM estoque WHERE id='$id'";
-    $resultado=mysqli_query($connect, $sql);
-    $dados=mysqli_fetch_array($resultado);
-endif;
+$dados = [];
+
+if(isset($_GET['id'])) {
+    $id = $_GET['id'];
+    
+    $sql = "SELECT * FROM estoque WHERE id = :id";
+    
+    $stmt = $connect->prepare($sql);
+    $stmt->execute([':id' => $id]);
+    
+    $dados = $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 ?>
 
 <div class="section no-pad-bot" id="index-banner">
@@ -21,35 +28,16 @@ endif;
             <div class="col s12">
                 <h3 class="light white-text">Editar Carro</h3>
                 <form action="./php_action/update.php" method="POST">
-                    <input type="hidden" name="id" value="<?php echo $dados['id']; ?>">
+                    <input type="hidden" name="id" value="<?= $dados['id']; ?>">
+                    <?php
+                        $fields = ['marca', 'modelo', 'descricao', 'mod_fab', 'cor', 'placa', 'valor'];
+                        foreach ($fields as $field) {
+                    ?>
                     <div class="input-field col s12 m4">
-                        <input type="text" name="marca" id="marca" value="<?php echo $dados['marca']; ?>">
-                        <label for="marca">Marca</label>
+                        <input type="text" name="<?= $field; ?>" id="<?= $field; ?>" value="<?= $dados[$field]; ?>">
+                        <label for="<?= $field; ?>"><?= ucfirst($field); ?></label>
                     </div>
-                    <div class="input-field col s12 m4">
-                        <input type="text" name="modelo" id="modelo" value="<?php echo $dados['modelo']; ?>">
-                        <label for="modelo">Modelo</label>
-                    </div>
-                    <div class="input-field col s12 m4">
-                        <input type="text" name="descricao" id="descricao" value="<?php echo $dados['descricao']; ?>">
-                        <label for="descricao">Descrição</label>
-                    </div>
-                    <div class="input-field col s12 m4">
-                        <input type="text" name="mod_fab" id="mod_fab" value="<?php echo $dados['mod_fab']; ?>">
-                        <label for="mod_fab">Modelo/Fabricação</label>
-                    </div>
-                    <div class="input-field col s12 m4">
-                        <input type="text" name="cor" id="cor" value="<?php echo $dados['cor']; ?>">
-                        <label for="cor">Cor</label>
-                    </div>
-                    <div class="input-field col s12 m4">
-                        <input type="text" name="placa" id="placa" value="<?php echo $dados['placa']; ?>">
-                        <label for="placa">Placa</label>
-                    </div>
-                    <div class="input-field col s12">
-                        <input type="text" name="valor" id="valor" value="<?php echo $dados['valor']; ?>">
-                        <label for="valor">Valor (R$)</label>
-                    </div>
+                    <?php } ?>
                     <button type="submit" name="btn-alterar" class="btn">Alterar</button>
                 </form>
             </div>
@@ -60,5 +48,5 @@ endif;
 
 <?php
 //footer
-include_once "includes/footer.php";
+require 'includes/footer.php';
 ?>
