@@ -1,6 +1,6 @@
 <?php
 //header
-include_once "includes/header.php";
+require 'includes/header.php';
 ?>
 
 <div class="section no-pad-bot" id="index-banner">
@@ -10,34 +10,15 @@ include_once "includes/header.php";
             <div class="col s12">
                 <h3 class="light white-text">Adicionar Carro</h3>
                 <form action="./php_action/create.php" method="POST">
+                    <?php
+                        $fields = ['marca', 'modelo', 'descricao', 'mod_fab', 'cor', 'placa', 'valor'];
+                        foreach ($fields as $field) {
+                    ?>
                     <div class="input-field col s12 m4">
-                        <input type="text" name="marca" id="marca">
-                        <label for="marca">Marca</label>
+                        <input type="text" name="<?= $field; ?>" id="<?= $field; ?>">
+                        <label for="<?= $field; ?>"><?= ucfirst($field); ?></label>
                     </div>
-                    <div class="input-field col s12 m4">
-                        <input type="text" name="modelo" id="modelo">
-                        <label for="modelo">Modelo</label>
-                    </div>
-                    <div class="input-field col s12 m4">
-                        <input type="text" name="descricao" id="descricao">
-                        <label for="descricao">Descrição</label>
-                    </div>
-                    <div class="input-field col s12 m4">
-                        <input type="text" name="mod_fab" id="mod_fab">
-                        <label for="mod_fab">Modelo/Fabricação</label>
-                    </div>
-                    <div class="input-field col s12 m4">
-                        <input type="text" name="cor" id="cor">
-                        <label for="cor">Cor</label>
-                    </div>
-                    <div class="input-field col s12 m4">
-                        <input type="text" name="placa" id="placa">
-                        <label for="placa">Placa</label>
-                    </div>
-                    <div class="input-field col s12">
-                        <input type="text" name="valor" id="valor">
-                        <label for="valor">Valor (R$)</label>
-                    </div>
+                    <?php } ?>
                     <button type="submit" name="btn-adicionar" class="btn">Adicionar</button>
                 </form>
             </div>
@@ -48,5 +29,5 @@ include_once "includes/header.php";
 
 <?php
 //footer
-include_once "includes/footer.php";
+require 'includes/footer.php';
 ?>
